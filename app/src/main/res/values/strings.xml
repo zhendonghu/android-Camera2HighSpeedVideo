@@ -1,0 +1,9 @@
+<resources>
+    <string name="record">Record</string>
+    <string name="stop">Stop</string>
+    <string name="description_info">Info</string>
+    <string name="permission_request">This sample needs permission for camera and audio recording.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="open_failed_of_not_support_high_speed">High frame rate recording is not supported</string>
+    <string name="video_info">Video size: %1$d x %2$d %3$dfps</string>
+</resources>
