@@ -11,7 +11,6 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static android.media.MediaCodec.CONFIGURE_FLAG_ENCODE;
@@ -23,8 +22,8 @@ import static android.media.MediaFormat.MIMETYPE_VIDEO_AVC;
 
 public class MediaCodecProc {
     private static final String TAG = "MediaCodecProc";
-    private static final int ASVL_PAF_NV21 = 0x802;
-    private static final int ASVL_PAF_I420 = 0x601;
+    private static final int COLOR_FORMAT_NV21 = 0x100;
+    private static final int COLOR_FORMAT_I420 = 0x101;
     private static final long DEFAULT_TIMEOUT_US = 10000;
 
     private final int decodeColorFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Flexible;
@@ -49,7 +48,7 @@ public class MediaCodecProc {
         mFilePath       = filePath;
         mVideoFps       = videoFPS;
         mVideoUpRatio   = videoUpRatio;
-        mFormat         = ASVL_PAF_NV21;
+        mFormat         = COLOR_FORMAT_NV21;
         int lastIndex = mFilePath.lastIndexOf("/");
         mOutputDir = mFilePath.substring(0, lastIndex);
 //        mEncodeThread   = new EncodeThread(mOutputDir);
@@ -149,14 +148,14 @@ public class MediaCodecProc {
 //                    dumpYUVFrame(image, outputFrameCount, width, height);
 
                     switch (mFormat) {
-                        case ASVL_PAF_NV21:
+                        case COLOR_FORMAT_NV21:
                             byte[] arr = Utils.transformNV21FromImage(image);
                             // TODO You can do some processing on the data here, such as inserting frames, etc.
                             /* your codes */
 
                             mEncodeThread.push(arr);
                             break;
-                        case ASVL_PAF_I420:
+                        case COLOR_FORMAT_I420:
                             break;
                     }
 
@@ -196,11 +195,11 @@ public class MediaCodecProc {
     private void dumpYUVFrame(Image image, int index, int width, int height) {
         String fileName;
         switch (mFormat) {
-            case ASVL_PAF_NV21:
+            case COLOR_FORMAT_NV21:
                 fileName = mStrDecodeOutputDir + "/" + "output_" + index + "_" + width + "x" + height + ".nv21";
                 Utils.saveYUVFile(fileName, Utils.transformNV21FromImage(image), false);
                 break;
-            case ASVL_PAF_I420:
+            case COLOR_FORMAT_I420:
                 fileName = mStrDecodeOutputDir + "/" + "output_" + index + "_" + width + "x" + height + ".yuv";
                 // TODO transform image to I420
 //                Utils.saveYUVFile(fileName, Utils.transformNV21FromImage(image), false);
